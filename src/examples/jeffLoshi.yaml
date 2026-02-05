@@ -1,0 +1,41 @@
+name: Jeff or Loshi
+source code: |
+  # Writes "Jeff" or "Loshi" depending on input
+  input: 'F'
+  blank: ' '
+  start state: start
+  table:
+    start:
+      F: {write: J, move: R, nextState: f2}
+      L: {write: Y, move: R, nextState: l2}
+    f2:
+      ' ': {write: e, move: R, nextState: f3}
+    f3:
+      ' ': {write: f, move: R, nextState: f4}
+    f4:
+      ' ': {write: f, move: R, nextState: done}
+    l2:
+      ' ': {write: o, move: R, nextState: l3}
+    l3:
+      ' ': {write: s, move: R, nextState: l4}
+    l4:
+      ' ': {write: h, move: R, nextState: l5}
+    l5:
+      ' ': {write: i, move: R, nextState: l6}
+    l6:
+      ' ': {write: m, move: R, nextState: l7}
+    l7:
+      ' ': {write: i, move: R, nextState: done}
+    done:
+positions:
+  start: {x: 200, y: 250}
+  f2: {x: 350, y: 150}
+  f3: {x: 500, y: 150}
+  f4: {x: 650, y: 150}
+  l2: {x: 350, y: 350}
+  l3: {x: 500, y: 350}
+  l4: {x: 650, y: 350}
+  l5: {x: 800, y: 350}
+  l6: {x: 950, y: 350}
+  l7: {x: 1100, y: 350}
+  done: {x: 800, y: 250}
