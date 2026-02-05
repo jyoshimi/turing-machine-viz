@@ -1,6 +1,8 @@
-name: Jeff or Loshi
+name: Jeff Yoshimi
 source code: |
-  # Writes "Jeff" or "Loshi" depending on input
+  # Writes "Jeff" or "Yoshimi" depending on input
+  # F (for first name) spells out Jeff
+  # L (for last name) spells out Yoshimi
   input: 'F'
   blank: ' '
   start state: start

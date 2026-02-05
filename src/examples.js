@@ -9,7 +9,7 @@ function requireExample(name) {
 }
 
 var examplePairs = [
-  'jeffLoshi',
+  'jeffYoshimi',
   'repeat01',
   'binaryIncrement',
   'divisibleBy3',
@@ -49,5 +49,5 @@ var list = examplePairs.map(function (pair) { return pair[1]; });
 exports.hasID = isExampleID;
 exports.get = get;
 exports.list = list;
-exports.firsttimeDocID = 'jeffLoshi';
+exports.firsttimeDocID = 'jeffYoshimi';
 exports.blankTemplate = requireExample('_template');
