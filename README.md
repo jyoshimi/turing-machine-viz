@@ -1,6 +1,6 @@
 # [turingmachine.io](http://turingmachine.io)
 
-This is a fork of [Andy Li's](https://github.com/aepsilon/turing-machine-viz) Turing machine visualizer by Jeff Yoshimi, with only minor formatting changes.
+This is a fork of [Andy Li's](https://github.com/aepsilon/turing-machine-viz) Turing machine visualizer by [Jeff Yoshimi](https://jeffyoshimi.net), with only minor formatting changes. For more information, see [Andy Li's original page](https://github.com/aepsilon/turing-machine-viz).
 
 This is a [Turing machine] visualizer designed for learning through visual thinking and creative exploration.
 
@@ -40,7 +40,7 @@ a visual dependency graph that’s good for getting a feel for the code layout.
 
 ## Deployment
 
-The site is automatically deployed to GitHub Pages via GitHub Actions.
+The site is automatically deployed to [GitHub Pages](https://jyoshimi.github.io/turing-machine-viz/) via GitHub Actions.
 
 
 ## Dependencies
