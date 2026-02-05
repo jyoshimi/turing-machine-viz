@@ -28,14 +28,14 @@ source code: |
     done:
 
 positions:
-  start: {x: 80, y: 250, fixed: true}
-  f2: {x: 200, y: 150, fixed: true}
-  f3: {x: 320, y: 150, fixed: true}
-  f4: {x: 440, y: 150, fixed: true}
-  l2: {x: 200, y: 350, fixed: true}
-  l3: {x: 320, y: 350, fixed: true}
-  l4: {x: 440, y: 350, fixed: true}
-  l5: {x: 560, y: 350, fixed: true}
-  l6: {x: 680, y: 350, fixed: true}
-  l7: {x: 720, y: 250, fixed: true}
-  done: {x: 720, y: 150, fixed: true}
+  start: {x: 80, y: 200, fixed: true}
+  f2: {x: 220, y: 80, fixed: true}
+  f3: {x: 360, y: 80, fixed: true}
+  f4: {x: 500, y: 80, fixed: true}
+  l2: {x: 220, y: 320, fixed: true}
+  l3: {x: 360, y: 320, fixed: true}
+  l4: {x: 500, y: 320, fixed: true}
+  l5: {x: 640, y: 320, fixed: true}
+  l6: {x: 780, y: 320, fixed: true}
+  l7: {x: 920, y: 320, fixed: true}
+  done: {x: 1060, y: 200, fixed: true}
