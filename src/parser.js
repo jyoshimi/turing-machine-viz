@@ -103,12 +103,12 @@ function parseSpec(str) {
 function checkTableType(val) {
   if (val == null) {
     throw new TMSpecError('Missing transition table',
-    {suggestion: 'Specify one using <code>table:</code>'});
+      {suggestion: 'Specify one using <code>table:</code>'});
   }
   if (typeof val !== 'object') {
     throw new TMSpecError('Transition table has an invalid type',
-    {problemValue: typeof val,
-    info: 'The transition table should be a nested mapping from states to symbols to instructions'});
+      {problemValue: typeof val,
+        info: 'The transition table should be a nested mapping from states to symbols to instructions'});
   }
 }
 
@@ -120,8 +120,8 @@ function parseSynonyms(val, table) {
   if (typeof val !== 'object') {
     throw new TMSpecError('Synonyms table has an invalid type',
       {problemValue: typeof val,
-      info: 'Synonyms should be a mapping from string abbreviations to instructions'
-        + ' (e.g. <code>accept: {R: accept}</code>)'});
+        info: 'Synonyms should be a mapping from string abbreviations to instructions'
+          + ' (e.g. <code>accept: {R: accept}</code>)'});
   }
   return _.mapValues(val, function (actionVal, key) {
     try {
@@ -147,8 +147,8 @@ function parseTable(synonyms, val) {
     }
     if (typeof stateObj !== 'object') {
       throw new TMSpecError('State entry has an invalid type',
-      {problemValue: typeof stateObj, state: state,
-      info: 'Each state should map symbols to instructions. An empty map signifies a halting state.'});
+        {problemValue: typeof stateObj, state: state,
+          info: 'Each state should map symbols to instructions. An empty map signifies a halting state.'});
     }
     return _.mapValues(stateObj, function (actionVal, symbol) {
       try {
@@ -164,17 +164,19 @@ function parseTable(synonyms, val) {
   });
 }
 
-// omits null/undefined properties
-// (?string, direction, ?string) -> {symbol?: string, move: direction, state?: string}
+// (?string, direction, string) -> {symbol?: string, move: direction, state: string}
 function makeInstruction(symbol, move, state) {
-  return Object.freeze(_.omitBy({symbol: symbol, move: move, state: state},
-    function (x) { return x == null; }));
+  var instruction = {move: move, state: state};
+  if (symbol != null) {
+    instruction.symbol = symbol;
+  }
+  return Object.freeze(instruction);
 }
 
 function checkTarget(table, instruct) {
   if (instruct.state != null && !(instruct.state in table)) {
     throw new TMSpecError('Undeclared state', {problemValue: instruct.state,
-    suggestion: 'Make sure to list all states in the transition table and define their transitions (if any)'});
+      suggestion: 'Make sure to list all states in the transition table and define their transitions (if any)'});
   }
   return instruct;
 }
@@ -189,8 +191,8 @@ function parseInstruction(synonyms, table, val) {
       case 'object': return parseInstructionObject(val);
       default: throw new TMSpecError('Invalid instruction type',
         {problemValue: typeof val,
-          info: 'An instruction can be a string (a direction <code>L</code>/<code>R</code> or a synonym)'
-            + ' or a mapping (examples: <code>{R: accept}</code>, <code>{write: \' \', L: start}</code>)'});
+          info: 'An instruction must be an object with <code>write</code>, <code>move</code>, and <code>nextState</code> keys'
+            + ' (example: <code>{write: \'1\', move: R, nextState: accept}</code>)'});
     }
   }());
 }
@@ -210,50 +212,67 @@ function parseInstructionString(synonyms, val) {
   if (synonyms && synonyms[val]) { return synonyms[val]; }
   throw new TMSpecError('Unrecognized string',
     {problemValue: val,
-    info: 'An instruction can be a string if it\'s a synonym or a direction'});
+      info: 'An instruction can be a string if it\'s a synonym or a direction'});
 }
 
-// type ActionObj = {write?: any, L: ?string} | {write?: any, R: ?string}
+// type ActionObj = {write: string, move: string, nextState: string}
 // case: ActionObj
 function parseInstructionObject(val) {
   var symbol, move, state;
   if (val == null) { throw new TMSpecError('Missing instruction'); }
+
+  // check for required keys
+  if (!('write' in val)) {
+    throw new TMSpecError('Missing required key',
+      {problemValue: 'write',
+        info: 'Every instruction must have <code>write</code>, <code>move</code>, and <code>nextState</code> keys'});
+  }
+  if (!('move' in val)) {
+    throw new TMSpecError('Missing required key',
+      {problemValue: 'move',
+        info: 'Every instruction must have <code>write</code>, <code>move</code>, and <code>nextState</code> keys'});
+  }
+  if (!('nextState' in val)) {
+    throw new TMSpecError('Missing required key',
+      {problemValue: 'nextState',
+        info: 'Every instruction must have <code>write</code>, <code>move</code>, and <code>nextState</code> keys'});
+  }
+
   // prevent typos: check for unrecognized keys
   (function () {
     var badKey;
     if (!Object.keys(val).every(function (key) {
       badKey = key;
-      return key === 'L' || key === 'R' || key === 'write';
+      return key === 'write' || key === 'move' || key === 'nextState';
     })) {
       throw new TMSpecError('Unrecognized key',
-      {problemValue: badKey,
-      info: 'An instruction always has a tape movement <code>L</code> or <code>R</code>, '
-        + 'and optionally can <code>write</code> a symbol'});
+        {problemValue: badKey,
+          info: 'An instruction must have exactly <code>write</code>, <code>move</code>, and <code>nextState</code> keys'});
     }
   })();
-  // one L/R key is required, with optional state value
-  if ('L' in val && 'R' in val) {
-    throw new TMSpecError('Conflicting tape movements',
-    {info: 'Each instruction needs exactly one movement direction, but two were found'});
-  }
-  if ('L' in val) {
-    move = TM.MoveHead.left;
-    state = val.L;
-  } else if ('R' in val) {
-    move = TM.MoveHead.right;
-    state = val.R;
+
+  // parse write (can be empty string)
+  var writeStr = String(val.write);
+  if (writeStr.length === 0 || writeStr.length === 1) {
+    symbol = writeStr.length === 0 ? null : writeStr;
   } else {
-    throw new TMSpecError('Missing movement direction');
+    throw new TMSpecError('Write must be a string of length 0 or 1');
   }
-  // write key is optional, but must contain a char value if present
-  if ('write' in val) {
-    var writeStr = String(val.write);
-    if (writeStr.length === 1) {
-      symbol = writeStr;
-    } else {
-      throw new TMSpecError('Write requires a string of length 1');
-    }
+
+  // parse move
+  if (val.move === 'L') {
+    move = TM.MoveHead.left;
+  } else if (val.move === 'R') {
+    move = TM.MoveHead.right;
+  } else {
+    throw new TMSpecError('Invalid movement direction',
+      {problemValue: val.move,
+        info: 'Move must be either <code>L</code> or <code>R</code>'});
   }
+
+  // parse nextState
+  state = String(val.nextState);
+
   return makeInstruction(symbol, move, state);
 }
 

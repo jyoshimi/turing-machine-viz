@@ -3,4 +3,4 @@ blank: '${3: }'
 start state: ${4:start}
 table:
   ${4}:
-    ${5}
+    ${5}: {write: ${6}, move: ${7:R}, nextState: ${8}}
