@@ -358,8 +358,8 @@ function StateViz(container, nodes, linkArray) {
                return (d.lastIndexOf('reversed-', 0) === 0) ? 0 : 10;
              },
              'orient':'auto',
-             'markerWidth':10,
-             'markerHeight':10
+             'markerWidth':6,
+             'markerHeight':6
             })
     .append('path')
       .attr('d', 'M 0 -5 L 10 0 L 0 5 Z')

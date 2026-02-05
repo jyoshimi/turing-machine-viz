@@ -11,7 +11,6 @@ function requireExample(name) {
 var examplePairs = [
   'jeffYoshimi',
   'repeat01',
-  'binaryIncrement',
   'divisibleBy3',
   'copy1s',
   'divisibleBy3Base10',
