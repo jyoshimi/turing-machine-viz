@@ -11,8 +11,8 @@ source code: |
   blank: ' '
   start state: zero
   synonyms:
-    accept: {R: accept}
-    reject: {R: reject}
+    accept: {write: '', move: R, nextState: accept}
+    reject: {write: '', move: R, nextState: reject}
   # The idea: divide the length by 2 repeatedly until it reaches 1.
 
   # To do this, cross off every other 0, one pass at a time.
@@ -24,25 +24,25 @@ source code: |
   # erase it on the first pass and start the count from 1 from then on.
   table:
     zero:
-      0  : {write: ' ', R: one}
+      0  : {write: ' ', move: R, nextState: one}
       ' ': reject
     # Base case: accept length of 1 = 2^0.
     one:
-      0  : {write: x, R: even}
+      0  : {write: x, move: R, nextState: even}
       ' ': accept
-      x  : R
+      x  : {write: '', move: R, nextState: one}
     # Inductive case: divide by 2 and check for no remainder.
     even:
-      0  : {R: odd}
-      ' ': {L: back} # return for another pass
-      x  : R
+      0  : {write: '', move: R, nextState: odd}
+      ' ': {write: '', move: L, nextState: back}
+      x  : {write: '', move: R, nextState: even}
     odd: # odd and > 1
-      0  : {write: x, R: even}
-      ' ': reject # odd number of 0s on this pass
-      x  : R
+      0  : {write: x, move: R, nextState: even}
+      ' ': reject
+      x  : {write: '', move: R, nextState: odd}
     back:
-      ' ': {R: one}
-      [0,x]: L
+      ' ': {write: '', move: R, nextState: one}
+      [0,x]: {write: '', move: L, nextState: back}
     accept:
     reject:
 positions:

@@ -17,18 +17,18 @@ source code: |
   start state: q0
   table:
     q0:
-      [0,3,6,9]: R     # 0 + 0 ≡ 0 (mod 3)
-      [1,4,7]: {R: q1} # 0 + 1 ≡ 1
-      [2,5,8]: {R: q2} # 0 + 2 ≡ 2
-      ' ': {R: accept}
+      [0,3,6,9]: {write: '', move: R, nextState: q0}
+      [1,4,7]: {write: '', move: R, nextState: q1}
+      [2,5,8]: {write: '', move: R, nextState: q2}
+      ' ': {write: '', move: R, nextState: accept}
     q1:
-      [0,3,6,9]: R     # 1 + 0 ≡ 1
-      [1,4,7]: {R: q2} # 1 + 1 ≡ 2
-      [2,5,8]: {R: q0} # 1 + 2 ≡ 0
+      [0,3,6,9]: {write: '', move: R, nextState: q1}
+      [1,4,7]: {write: '', move: R, nextState: q2}
+      [2,5,8]: {write: '', move: R, nextState: q0}
     q2:
-      [0,3,6,9]: R     # 2 + 0 ≡ 2
-      [1,4,7]: {R: q0} # 2 + 1 ≡ 0
-      [2,5,8]: {R: q1} # 2 + 2 ≡ 1
+      [0,3,6,9]: {write: '', move: R, nextState: q2}
+      [1,4,7]: {write: '', move: R, nextState: q0}
+      [2,5,8]: {write: '', move: R, nextState: q1}
     accept:
 
 

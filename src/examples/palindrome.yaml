@@ -5,32 +5,32 @@ source code: |
   blank: ' '
   start state: start
   synonyms:
-    accept: {R: accept}
-    reject: {R: reject}
+    accept: {write: '', move: R, nextState: accept}
+    reject: {write: '', move: R, nextState: reject}
   # A palindrome is either the empty string, a single symbol,
   # or a (shorter) palindrome with the same symbol added to both ends.
   table:
     start:
-      a: {write: ' ', R: haveA}
-      b: {write: ' ', R: haveB}
-      ' ': accept # empty string
+      a: {write: ' ', move: R, nextState: haveA}
+      b: {write: ' ', move: R, nextState: haveB}
+      ' ': accept
     haveA:
-      [a,b]: R
-      ' ': {L: matchA}
+      [a,b]: {write: '', move: R, nextState: haveA}
+      ' ': {write: '', move: L, nextState: matchA}
     haveB:
-      [a,b]: R
-      ' ': {L: matchB}
+      [a,b]: {write: '', move: R, nextState: haveB}
+      ' ': {write: '', move: L, nextState: matchB}
     matchA:
-      a: {write: ' ', L: back} # same symbol at both ends
+      a: {write: ' ', move: L, nextState: back}
       b: reject
-      ' ': accept # single symbol
+      ' ': accept
     matchB:
       a: reject
-      b: {write: ' ', L: back} # same symbol at both ends
-      ' ': accept # single symbol
+      b: {write: ' ', move: L, nextState: back}
+      ' ': accept
     back:
-      [a,b]: L
-      ' ': {R: start}
+      [a,b]: {write: '', move: L, nextState: back}
+      ' ': {write: '', move: R, nextState: start}
     accept:
     reject:
 

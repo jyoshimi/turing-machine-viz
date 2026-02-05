@@ -8,13 +8,13 @@ source code: |
   start state: b
   table:
     b:
-      ' ': {write: 0, R: c}
+      ' ': {write: 0, move: R, nextState: c}
     c:
-      ' ':           {R: e}
+      ' ': {write: '', move: R, nextState: e}
     e:
-      ' ': {write: 1, R: f}
+      ' ': {write: 1, move: R, nextState: f}
     f:
-      ' ':           {R: b}
+      ' ': {write: '', move: R, nextState: b}
 
 
   # (Turing uses the convention of leaving a gap after each output cell,

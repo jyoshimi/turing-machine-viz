@@ -10,13 +10,20 @@ source code: |
 
   table:
     # Check for the form a^(i)b^(j)c^(k) where i,j,k ≥ 1.
-    start:  {        a: {R: a+}}
-    a+:     {a: R,   b: {R: b+}}
-    b+:     {b: R,   c: {R: c+}}
-    c+:     {c: R, ' ': {L: left}}
+    start:
+      a: {write: '', move: R, nextState: a+}
+    a+:
+      a: {write: '', move: R, nextState: a+}
+      b: {write: '', move: R, nextState: b+}
+    b+:
+      b: {write: '', move: R, nextState: b+}
+      c: {write: '', move: R, nextState: c+}
+    c+:
+      c: {write: '', move: R, nextState: c+}
+      ' ': {write: '', move: L, nextState: left}
     left:
-      [a,b,c]: L
-      ' ': {R: eachA}
+      [a,b,c]: {write: '', move: L, nextState: left}
+      ' ': {write: '', move: R, nextState: eachA}
     # Then check that i*j = k.
     #   The approach is two nested loops:
     #   For each 'a':
@@ -24,26 +31,26 @@ source code: |
     #       Mark one 'c'
     #   At the end, check that all c's are marked.
     eachA:
-      a: {write: ' ', R: eachB}
-      b: {R: scan}
+      a: {write: ' ', move: R, nextState: eachB}
+      b: {write: '', move: R, nextState: scan}
     eachB:
-      a: R
-      b: {write: B, R: markC}
-      C: {L: nextA}
+      a: {write: '', move: R, nextState: eachB}
+      b: {write: B, move: R, nextState: markC}
+      C: {write: '', move: L, nextState: nextA}
     markC:
-      [b,C]: R
-      c: {write: C, L: nextB}
+      [b,C]: {write: '', move: R, nextState: markC}
+      c: {write: C, move: L, nextState: nextB}
     nextB:
-      [b,C]: L
-      B: {R: eachB}
+      [b,C]: {write: '', move: L, nextState: nextB}
+      B: {write: '', move: R, nextState: eachB}
     nextA:
-      a: L
-      B: {write: b, L}
-      ' ': {R: eachA}
+      a: {write: '', move: L, nextState: nextA}
+      B: {write: b, move: L, nextState: nextA}
+      ' ': {write: '', move: R, nextState: eachA}
 
     scan:
-      [b,C]: R
-      ' ': {R: accept}
+      [b,C]: {write: '', move: R, nextState: scan}
+      ' ': {write: '', move: R, nextState: accept}
     accept:
 positions:
   start:  {x: 180, y: 40}

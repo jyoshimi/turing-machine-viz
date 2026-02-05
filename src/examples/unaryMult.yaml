@@ -12,36 +12,36 @@ source code: |
   table:
     # For each 1 in a, add a copy of b.
     eachA:
-      '|': {write: ' ', R: toB}  # Inductive case: a > 0.
-      '*': {R: skip}             # Base case:      a = 0.
+      '|': {write: ' ', move: R, nextState: toB}
+      '*': {write: '', move: R, nextState: skip}
     toB:
-      '|': R
-      '*': {R: eachB} # enter copier
+      '|': {write: '', move: R, nextState: toB}
+      '*': {write: '', move: R, nextState: eachB}
     nextA: # return from copier
-      ' ': {write: '|', R: eachA}
-      ['|','*']: L
+      ' ': {write: '|', move: R, nextState: eachA}
+      ['|','*']: {write: '', move: L, nextState: nextA}
 
     skip:
-      '|': R
-      ' ': {R: done}
+      '|': {write: '', move: R, nextState: skip}
+      ' ': {write: '', move: R, nextState: done}
     done:
 
     # This is the 'copy 1s' machine, with ' ' as 0 and '|' as 1.
     eachB:
-      ' ': {L: nextA}
-      '|': {write: ' ', R: sep}
+      ' ': {write: '', move: L, nextState: nextA}
+      '|': {write: ' ', move: R, nextState: sep}
     sep:
-      ' ': {R: add}
-      '|': R
+      ' ': {write: '', move: R, nextState: add}
+      '|': {write: '', move: R, nextState: sep}
     add:
-      ' ': {write: '|', L: sepL}
-      '|': R
+      ' ': {write: '|', move: L, nextState: sepL}
+      '|': {write: '', move: R, nextState: add}
     sepL:
-      ' ': {L: nextB}
-      '|': L
+      ' ': {write: '', move: L, nextState: nextB}
+      '|': {write: '', move: L, nextState: sepL}
     nextB:
-      ' ': {write: '|', R: eachB}
-      '|': L
+      ' ': {write: '|', move: R, nextState: eachB}
+      '|': {write: '', move: L, nextState: nextB}
 
 positions:
   eachA:  {x: 400, y:  50}

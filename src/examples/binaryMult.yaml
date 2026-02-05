@@ -9,79 +9,83 @@ source code: |
   table:
     # Prefix the input with a '+', and go to the rightmost digit.
     start:
-      [0,1]: {L: init}
+      [0,1]: {write: '', move: L, nextState: init}
     init:
-      ' ': {write: '+', R: right}
+      ' ': {write: '+', move: R, nextState: right}
     right:
-      [0,1,'*']: R
-      ' ': {L: readB}
+      [0,1,'*']: {write: '', move: R, nextState: right}
+      ' ': {write: '', move: L, nextState: readB}
 
     # Read and erase the last digit of the multiplier.
     # If it's 1, add the current multiplicand.
     # In any case, double the multiplicand afterwards.
     readB:
-      0: {write: ' ', L: doubleL}
-      1: {write: ' ', L: addA}
+      0: {write: ' ', move: L, nextState: doubleL}
+      1: {write: ' ', move: L, nextState: addA}
     addA:
-      [0,1]: L
-      '*': {L: read} # enter adder
+      [0,1]: {write: '', move: L, nextState: addA}
+      '*': {write: '', move: L, nextState: read}
     # Double the multiplicand by appending a 0.
     doubleL:
-      [0,1]: L
-      '*': {write: 0, R: shift}
+      [0,1]: {write: '', move: L, nextState: doubleL}
+      '*': {write: 0, move: R, nextState: shift}
     double: # return from adder
-      [0,1,+]: R
-      '*': {write: 0, R: shift}
+      [0,1,+]: {write: '', move: R, nextState: double}
+      '*': {write: 0, move: R, nextState: shift}
     # Make room by shifting the multiplier right 1 cell.
     shift:
-      0: {write: '*', R: shift0}
-      1: {write: '*', R: shift1}
-      ' ': {L: tidy} # base case: multiplier = 0
+      0: {write: '*', move: R, nextState: shift0}
+      1: {write: '*', move: R, nextState: shift1}
+      ' ': {write: '', move: L, nextState: tidy}
     shift0:
-      0:   {R: shift0}
-      1:   {write: 0, R: shift1}
-      ' ': {write: 0, R: right}
+      0:   {write: '', move: R, nextState: shift0}
+      1:   {write: 0, move: R, nextState: shift1}
+      ' ': {write: 0, move: R, nextState: right}
     shift1:
-      0:   {write: 1, R: shift0}
-      1:   {R: shift1}
-      ' ': {write: 1, R: right}
+      0:   {write: 1, move: R, nextState: shift0}
+      1:   {write: '', move: R, nextState: shift1}
+      ' ': {write: 1, move: R, nextState: right}
 
     tidy:
-      [0,1]: {write: ' ', L}
-      +: {write: ' ', L: done}
+      [0,1]: {write: ' ', move: L, nextState: tidy}
+      +: {write: ' ', move: L, nextState: done}
     done:
 
   # This is the 'binary addition' machine almost verbatim.
   # It's adjusted to keep the '+'
   # and to lead to another state instead of halting.
     read:
-      0: {write: c, L: have0}
-      1: {write: c, L: have1}
-      +: {L: rewrite} # keep the +
-    have0: {[0,1]: L, +: {L: add0}}
-    have1: {[0,1]: L, +: {L: add1}}
+      0: {write: c, move: L, nextState: have0}
+      1: {write: c, move: L, nextState: have1}
+      +: {write: '', move: L, nextState: rewrite}
+    have0:
+      [0,1]: {write: '', move: L, nextState: have0}
+      +: {write: '', move: L, nextState: add0}
+    have1:
+      [0,1]: {write: '', move: L, nextState: have1}
+      +: {write: '', move: L, nextState: add1}
     add0:
-      [0,' ']: {write: O, R: back0}
-      1      : {write: I, R: back0}
-      [O,I]  : L
+      [0,' ']: {write: O, move: R, nextState: back0}
+      1      : {write: I, move: R, nextState: back0}
+      [O,I]  : {write: '', move: L, nextState: add0}
     add1:
-      [0,' ']: {write: I, R: back1}
-      1      : {write: O, L: carry}
-      [O,I]  : L
+      [0,' ']: {write: I, move: R, nextState: back1}
+      1      : {write: O, move: L, nextState: carry}
+      [O,I]  : {write: '', move: L, nextState: add1}
     carry:
-      [0,' ']: {write: 1, R: back1}
-      1      : {write: 0, L}
+      [0,' ']: {write: 1, move: R, nextState: back1}
+      1      : {write: 0, move: L, nextState: carry}
     back0:
-      [0,1,O,I,+]: R
-      c: {write: 0, L: read}
+      [0,1,O,I,+]: {write: '', move: R, nextState: back0}
+      c: {write: 0, move: L, nextState: read}
     back1:
-      [0,1,O,I,+]: R
-      c: {write: 1, L: read}
+      [0,1,O,I,+]: {write: '', move: R, nextState: back1}
+      c: {write: 1, move: L, nextState: read}
     rewrite:
-      O: {write: 0, L}
-      I: {write: 1, L}
-      [0,1]: L
-      ' ': {R: double} # when done, go to the 'double' state
+      O: {write: 0, move: L, nextState: rewrite}
+      I: {write: 1, move: L, nextState: rewrite}
+      [0,1]: {write: '', move: L, nextState: rewrite}
+      ' ': {write: '', move: R, nextState: double}
 
 
   # Remark:

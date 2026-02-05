@@ -7,24 +7,24 @@ source code: |
   table:
     # mark the current 1 by erasing it
     each:
-      0: {R: H}
-      1: {write: 0, R: sep}
+      0: {write: '', move: R, nextState: H}
+      1: {write: 0, move: R, nextState: sep}
     # skip to the separator
     sep:
-      0: {R: add}
-      1: R
+      0: {write: '', move: R, nextState: add}
+      1: {write: '', move: R, nextState: sep}
     # skip to the end of the copy and write a 1
     add:
-      0: {write: 1, L: sepL}
-      1: R
+      0: {write: 1, move: L, nextState: sepL}
+      1: {write: '', move: R, nextState: add}
     # return to the separator
     sepL:
-      0: {L: next}
-      1: L
+      0: {write: '', move: L, nextState: next}
+      1: {write: '', move: L, nextState: sepL}
     # return to the erased 1, restore it, and then advance to the next 1
     next:
-      0: {write: 1, R: each}
-      1: L
+      0: {write: 1, move: R, nextState: each}
+      1: {write: '', move: L, nextState: next}
     H:
 
 

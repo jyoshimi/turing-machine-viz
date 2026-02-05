@@ -689,14 +689,12 @@ start state: right
 table:
   # scan to the rightmost digit
   right:
-    1: R
-    0: R
-    ' ': {L: carry}
+    [1,0]: {write: '', move: R, nextState: right}
+    ' '  : {write: '', move: L, nextState: carry}
   # then carry the 1
   carry:
-    1: {write: 0, L}
-    0: {write: 1, L: done}
-    ' ': {write: 1, L: done}
+    1      : {write: 0, move: L, nextState: carry}
+    [0,' ']: {write: 1, move: L, nextState: done}
   done:
 </pre>
     <p>
@@ -709,23 +707,26 @@ table:
     </p>
     <p>
       A state and a symbol together map to an instruction.
-      In the <code>carry</code> state, for instance, the symbol <code>1</code> maps to the instruction <code>{write: 0, L}</code>.
+      In the <code>carry</code> state, for instance, the symbol <code>1</code> maps to the instruction <code>{write: 0, move: L, nextState: carry}</code>.
       When no instruction is defined, as in the <code>done</code> state, the machine halts.
     </p>
     <h4>Instruction format</h4>
-    The general form of an instruction has three parts:
-    <pre>{write: <var>symbol</var>, <var>move</var>: <var>state</var>}</pre>
+    Every instruction has three parts:
+    <pre>{write: <var>symbol</var>, move: <var>direction</var>, nextState: <var>state</var>}</pre>
     <ul>
-      <li><code>{write: 1, L: done}</code> writes the symbol <code>1</code>,
-        moves the tape head left (<code>L</code>), and goes to the <code>done</code> state.
-      </li>
+      <li><code>write</code> specifies the symbol to write (use an empty string <code>''</code> to leave the symbol unchanged)</li>
+      <li><code>move</code> specifies the direction: <code>L</code> (left) or <code>R</code> (right)</li>
+      <li><code>nextState</code> specifies which state to transition to (can be the current state for self-transitions)</li>
     </ul>
-    <p>For brevity, you can omit the symbol and state if they stay the same.</p>
+    <p>Examples:</p>
     <ul>
-      <li><code>{L: carry}</code> writes the same symbol that was read,
-        moves the tape head left, and goes to the <code>carry</code> state.</li>
-      <li><code>R</code> (shorthand for {R}) simply moves the tape head right.
-        It writes back the same symbol and stays in the same state.</li>
+      <li><code>{write: 1, move: L, nextState: done}</code> writes the symbol <code>1</code>,
+        moves the tape head left, and goes to the <code>done</code> state.
+      </li>
+      <li><code>{write: '', move: R, nextState: carry}</code> leaves the symbol unchanged,
+        moves the tape head right, and goes to the <code>carry</code> state.</li>
+      <li><code>{write: 0, move: L, nextState: carry}</code> writes <code>0</code>,
+        moves left, and stays in the <code>carry</code> state (self-transition).</li>
     </ul>
   </section>
 

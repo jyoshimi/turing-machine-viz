@@ -14,14 +14,14 @@ source code: |
   start state: A
   table:
     A:
-      0: {write: 1, R: B}
-      1: {L: C}
+      0: {write: 1, move: R, nextState: B}
+      1: {write: '', move: L, nextState: C}
     B:
-      0: {write: 1, L: A}
-      1: R
+      0: {write: 1, move: L, nextState: A}
+      1: {write: '', move: R, nextState: B}
     C:
-      0: {write: 1, L: B}
-      1: {R: H}
+      0: {write: 1, move: L, nextState: B}
+      1: {write: '', move: R, nextState: H}
     H:
 
   # An alternative criterion is halting after the most steps.

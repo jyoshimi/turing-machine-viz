@@ -10,28 +10,28 @@ source code: |
   table:
     start:
       # Inductive case: start with the same symbol.
-      0: {write: ' ', R: have0}
-      1: {write: ' ', R: have1}
+      0: {write: ' ', move: R, nextState: have0}
+      1: {write: ' ', move: R, nextState: have1}
       # Base case: empty string.
-      '#': {R: check}
+      '#': {write: '', move: R, nextState: check}
     have0:
-      [0,1]: R
-      '#': {R: match0}
+      [0,1]: {write: '', move: R, nextState: have0}
+      '#': {write: '', move: R, nextState: match0}
     have1:
-      [0,1]: R
-      '#': {R: match1}
+      [0,1]: {write: '', move: R, nextState: have1}
+      '#': {write: '', move: R, nextState: match1}
     match0:
-      x: R
-      0: {write: x, L: back}
+      x: {write: '', move: R, nextState: match0}
+      0: {write: x, move: L, nextState: back}
     match1:
-      x: R
-      1: {write: x, L: back}
+      x: {write: '', move: R, nextState: match1}
+      1: {write: x, move: L, nextState: back}
     back:
-      [0,1,'#',x]: L
-      ' ': {R: start}
+      [0,1,'#',x]: {write: '', move: L, nextState: back}
+      ' ': {write: '', move: R, nextState: start}
     check:
-      x: R
-      ' ': {R: accept}
+      x: {write: '', move: R, nextState: check}
+      ' ': {write: '', move: R, nextState: accept}
     accept:
 
 

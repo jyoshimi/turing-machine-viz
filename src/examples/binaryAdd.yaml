@@ -11,44 +11,48 @@ source code: |
   table:
     # Start at the second number's rightmost digit.
     right:
-      [0,1,+]: R
-      ' ': {L: read}
+      [0,1,+]: {write: '', move: R, nextState: right}
+      ' ': {write: '', move: L, nextState: read}
 
     # Add each digit from right to left:
     # read the current digit of the second number,
     read:
-      0: {write: c, L: have0}
-      1: {write: c, L: have1}
-      +: {write: ' ', L: rewrite}
+      0: {write: c, move: L, nextState: have0}
+      1: {write: c, move: L, nextState: have1}
+      +: {write: ' ', move: L, nextState: rewrite}
     # and add it to the next place of the first number,
     # marking the place (using O or I) as already added.
-    have0: {[0,1]: L, +: {L: add0}}
-    have1: {[0,1]: L, +: {L: add1}}
+    have0:
+      [0,1]: {write: '', move: L, nextState: have0}
+      +: {write: '', move: L, nextState: add0}
+    have1:
+      [0,1]: {write: '', move: L, nextState: have1}
+      +: {write: '', move: L, nextState: add1}
     add0:
-      [0,' ']: {write: O, R: back0}
-      1      : {write: I, R: back0}
-      [O,I]  : L
+      [0,' ']: {write: O, move: R, nextState: back0}
+      1      : {write: I, move: R, nextState: back0}
+      [O,I]  : {write: '', move: L, nextState: add0}
     add1:
-      [0,' ']: {write: I, R: back1}
-      1      : {write: O, L: carry}
-      [O,I]  : L
+      [0,' ']: {write: I, move: R, nextState: back1}
+      1      : {write: O, move: L, nextState: carry}
+      [O,I]  : {write: '', move: L, nextState: add1}
     carry:
-      [0,' ']: {write: 1, R: back1}
-      1      : {write: 0, L}
+      [0,' ']: {write: 1, move: R, nextState: back1}
+      1      : {write: 0, move: L, nextState: carry}
     # Then, restore the current digit, and repeat with the next digit.
     back0:
-      [0,1,O,I,+]: R
-      c: {write: 0, L: read}
+      [0,1,O,I,+]: {write: '', move: R, nextState: back0}
+      c: {write: 0, move: L, nextState: read}
     back1:
-      [0,1,O,I,+]: R
-      c: {write: 1, L: read}
+      [0,1,O,I,+]: {write: '', move: R, nextState: back1}
+      c: {write: 1, move: L, nextState: read}
 
     # Finish: rewrite place markers back to 0s and 1s.
     rewrite:
-      O: {write: 0, L}
-      I: {write: 1, L}
-      [0,1]: L
-      ' ': {R: done}
+      O: {write: 0, move: L, nextState: rewrite}
+      I: {write: 1, move: L, nextState: rewrite}
+      [0,1]: {write: '', move: L, nextState: rewrite}
+      ' ': {write: '', move: R, nextState: done}
     done:
 
 
