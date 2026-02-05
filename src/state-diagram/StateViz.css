@@ -34,7 +34,8 @@ text {
 }
 
 .edgepath {
-  stroke: #666;
+  stroke: black;
+  stroke-width: 2px;
   fill: none;
   pointer-events: none;
 }
@@ -44,8 +45,8 @@ text {
 }
 
 #arrowhead, #reversed-arrowhead {
-  stroke: #666;
-  fill: #666;
+  stroke: black;
+  fill: black;
 }
 
 #active-arrowhead, #reversed-active-arrowhead {

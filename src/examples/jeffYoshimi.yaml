@@ -1,8 +1,5 @@
 name: Jeff Yoshimi
 source code: |
-  # Writes "Jeff" or "Yoshimi" depending on input
-  # F (for first name) spells out Jeff
-  # L (for last name) spells out Yoshimi
   input: 'F'
   blank: ' '
   start state: start
@@ -29,15 +26,4 @@ source code: |
     l7:
       ' ': {write: i, move: R, nextState: done}
     done:
-positions:
-  start: {x: 200, y: 250}
-  f2: {x: 350, y: 150}
-  f3: {x: 500, y: 150}
-  f4: {x: 650, y: 150}
-  l2: {x: 350, y: 350}
-  l3: {x: 500, y: 350}
-  l4: {x: 650, y: 350}
-  l5: {x: 800, y: 350}
-  l6: {x: 950, y: 350}
-  l7: {x: 1100, y: 350}
-  done: {x: 800, y: 250}
+
