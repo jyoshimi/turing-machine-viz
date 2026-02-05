@@ -1,5 +1,7 @@
 # [turingmachine.io](http://turingmachine.io)
 
+This is a fork of [Andy Li's](https://github.com/aepsilon/turing-machine-viz) Turing machine visualizer by Jeff Yoshimi, with only minor formatting changes.
+
 This is a [Turing machine] visualizer designed for learning through visual thinking and creative exploration.
 
 Machines are described in a simple YAML-based format.
@@ -34,6 +36,11 @@ a visual dependency graph that’s good for getting a feel for the code layout.
 [webpack server]: https://webpack.github.io/docs/webpack-dev-server.html
 [madge]: https://github.com/pahen/madge
 [Graphviz]: http://www.graphviz.org/
+
+
+## Deployment
+
+The site is automatically deployed to GitHub Pages via GitHub Actions.
 
 
 ## Dependencies
