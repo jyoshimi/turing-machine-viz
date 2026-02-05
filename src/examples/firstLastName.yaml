@@ -1,4 +1,4 @@
-name: Jeff Yoshimi
+name: first-last name
 source code: |
   input: 'F'
   blank: ' '
@@ -27,3 +27,15 @@ source code: |
       ' ': {write: i, move: R, nextState: done}
     done:
 
+positions:
+  start: {x: 80, y: 250, fixed: true}
+  f2: {x: 200, y: 150, fixed: true}
+  f3: {x: 320, y: 150, fixed: true}
+  f4: {x: 440, y: 150, fixed: true}
+  l2: {x: 200, y: 350, fixed: true}
+  l3: {x: 320, y: 350, fixed: true}
+  l4: {x: 440, y: 350, fixed: true}
+  l5: {x: 560, y: 350, fixed: true}
+  l6: {x: 680, y: 350, fixed: true}
+  l7: {x: 720, y: 250, fixed: true}
+  done: {x: 720, y: 150, fixed: true}
