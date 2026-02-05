@@ -1,4 +1,4 @@
-# [turingmachine.io](http://turingmachine.io)
+To try it go here: https://jyoshimi.github.io/turing-machine-viz/
 
 A fork of [Andy Li's](https://github.com/aepsilon) Turing machine visualizer by [Jeff Yoshimi](https://jeffyoshimi.net), with minor styling changes and a change to the input format that is a bit easier to teach from.
 
